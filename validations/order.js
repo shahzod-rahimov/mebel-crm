@@ -14,7 +14,7 @@ const orderCreateValidation = checkSchema({
         errorMessage:"target_adress must be string"
     },
     status:{
-        isNumber:{},
+        isNumeric:{},
         errorMessage:"status need to be number"
     },
     description:{
@@ -40,7 +40,7 @@ const orderUpdateValidation = checkSchema({
         errorMessage:"target_adress must be string"
     },
     status:{
-        isNumber:{},
+        isNumeric:{},
         optional:{},
         errorMessage:"status need to be number"
     },

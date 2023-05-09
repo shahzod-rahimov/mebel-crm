@@ -15,14 +15,18 @@ router.get(
 router.post(
   "/",
   rolePolice("SUPER-ADMIN", "ADMIN"),
-  [Validator.cityCreateValidation, handleValidationErrors],
+  [Validator.orderCreateValidation, handleValidationErrors],
   Order.create
 );
 router.get("/:id", [paramsIDValidation, handleValidationErrors], Order.getByID);
+router.get("/success",rolePolice("SUPER-ADMIN","ADMIN"),Order.getOrderWithSuccess);
+router.get("/failure",rolePolice("SUPER-ADMIN","ADMIN"),Order.getOrderWithFailure);
+router.post("/region",rolePolice("SUPER-ADMIN","ADMIN",Order.filterOrderRegions));
+router.put("/set-stuff",rolePolice("SUPER-ADMIN","ADMIN"),[Validator.queryValidation],Order.setStaffToOrder)
 router.patch(
   "/:id",
   rolePolice("SUPER-ADMIN", "ADMIN"),
-  [paramsIDValidation, Validator.cityUpdateValidation, handleValidationErrors],
+  [paramsIDValidation, Validator.orderUpdateValidation, handleValidationErrors],
   Order.update
 );
 router.delete(
