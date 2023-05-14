@@ -68,8 +68,17 @@ async function isPhoneExists(value) {
   }
 }
 
+const checkStaffID = checkSchema({
+  staff_id: {
+    isMongoId: {
+      errorMessage: "Invalid ID",
+    },
+  },
+});
+
 module.exports = {
   contactCreateValidation,
   contactUpdateValidation,
   queryValidation,
+  checkStaffID,
 };

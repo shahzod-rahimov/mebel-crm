@@ -8,6 +8,7 @@ const {
   queryPageValidation,
 } = require("../validations/commonReqValidators");
 const rolePolice = require("../middlewares/rolePolice");
+const { excelFileUpload } = require("../services/ExcelUpload");
 
 router.get(
   "/",
@@ -53,6 +54,14 @@ router.delete(
   rolePolice("SUPER-ADMIN"),
   [paramsIDValidation, handleValidationErrors],
   Contacts.remove
+);
+
+router.post(
+  "/upload/byexcel",
+  rolePolice("SUPER-ADMIN", "ADMIN", "OPERATOR"),
+  excelFileUpload.single("excelfile"),
+  [Validator.checkStaffID, handleValidationErrors],
+  Contacts.uploadFromFile
 );
 
 module.exports = router;

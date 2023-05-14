@@ -137,6 +137,27 @@ async function setStaffToOrder(req, res) {
     });
   }
 }
+
+async function getStatisticsFromRegion(req,res) {
+  try {
+    const {region} = req.body;
+    const orders = await Order.find({address:region});  
+    if(orders.length < 1) {
+      ApiError.notFound(
+        res,{
+          errorMessage:"Order is not found!"
+        }
+      )
+    }
+    const response  = {
+      Orders: Order,
+      ordersLength: orders.length
+    }
+    res.ok(200,resp)
+  } catch (error) {
+    ApiError.internal(res,{friendlyMsg:"Server error"})
+  }
+}
 module.exports = {
   getAll,
   create,

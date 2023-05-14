@@ -1,6 +1,8 @@
 const ApiError = require("../error/ApiError");
-const { getUniqueID } = require("../helpers/getUniqueID");
 const Contacts = require("../models/Contact");
+const { join } = require("path");
+const excelToJson = require("convert-excel-to-json");
+const { unlinkSync } = require("fs");
 
 async function getAll(req, res) {
   try {
@@ -33,11 +35,7 @@ async function getAll(req, res) {
 
 async function create(req, res) {
   try {
-    const countAll = await Contacts.countDocuments().exec();
-
-    const unique_id = getUniqueID(countAll);
-
-    const contact = await Contacts.create({ ...req.body, unique_id });
+    const contact = await Contacts.create(req.body);
 
     res.ok(201, contact);
   } catch (error) {
@@ -104,4 +102,52 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { getAll, create, getByID, getByUniqueID, update, remove };
+async function uploadFromFile(req, res) {
+  try {
+    const { staff_id } = req.body;
+    const { filename } = req.file;
+    const filePath = join(__dirname, "..", "public");
+
+    const result = excelToJson({
+      sourceFile: `${filePath}/${filename}`,
+    }).Sheet1;
+
+    for (let obj of result) {
+      const phone_number = obj.A;
+
+      const isExists = await Contacts.findOne({
+        phone_number: { $regex: `${phone_number}` },
+      });
+
+      if (isExists) {
+        continue;
+      }
+
+      await Contacts.create({ phone_number, staff_id });
+    }
+
+    unlinkSync(`${filePath}/${filename}`, function (err) {
+      if (err) {
+        return ApiError.internal(res, {
+          message: err,
+          friendlyMsg: "Server error",
+        });
+      }
+
+      console.info("file deleted successfully");
+    });
+
+    res.ok(200, { friendlyMsg: "File uploaded successfully" });
+  } catch (error) {
+    ApiError.internal(res, { message: error, friendlyMsg: "Server Error" });
+  }
+}
+module.exports = {
+  getAll,
+  create,
+  getByID,
+  getByUniqueID,
+  update,
+  remove,
+  uploadFromFile,
+};
