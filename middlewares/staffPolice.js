@@ -5,7 +5,7 @@ module.exports = async function (req, res, next) {
     return next();
   }
 
-  if (req.path.includes("auth")) {
+  if (req.path.includes("auth") || req.path.includes("images")) {
     return next();
   }
   try {

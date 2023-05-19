@@ -7,9 +7,9 @@ const signupValidation = checkSchema({
     errorMessage: "Full name must be a string",
   },
   phone_number: {
-    matches: {
-      options: /^(33|50|77|88|(9[013-57-9]))\d{7}$/,
-    },
+    // matches: {
+    //   options: /^(33|50|77|88|(9[013-57-9]))\d{7}$/,
+    // },
     custom: {
       options: async (value) => {
         const phone_number = await Staff.findOne({ phone_number: value });
@@ -73,9 +73,9 @@ const updateValidation = checkSchema({
     errorMessage: "Full name must be a string",
   },
   phone_number: {
-    matches: {
-      options: /^(33|50|77|88|(9[013-57-9]))\d{7}$/,
-    },
+    // matches: {
+    //   options: /^(33|50|77|88|(9[013-57-9]))\d{7}$/,
+    // },
     optional: {},
     custom: {
       options: async (value) => {

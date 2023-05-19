@@ -41,17 +41,20 @@ async function getAll(req, res) {
 
 async function create(req, res) {
   try {
-    const images = [];
+    const image = [];
 
     if (req.files) {
       req.files.forEach((obj) => {
-        images.push(obj.filename);
+        image.push(obj.filename);
       });
     }
 
-    const product = await Products.create({ ...req.body, images });
+    const { _id, name, price, images, updatedAt } = await Products.create({
+      ...req.body,
+      images: image,
+    });
 
-    res.ok(201, product);
+    res.ok(201, { _id, name, price, images, updatedAt });
   } catch (error) {
     ApiError.internal(res, { message: error, friendlyMsg: "Server Error" });
   }

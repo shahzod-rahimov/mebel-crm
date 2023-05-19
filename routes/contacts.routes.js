@@ -17,6 +17,12 @@ router.get(
   Contacts.getAll
 );
 
+router.get(
+  "/get/random-contact",
+  rolePolice("SUPER-ADMIN", "ADMIN", "OPERATOR"),
+  Contacts.getRandomContact
+);
+
 router.post(
   "/",
   rolePolice("SUPER-ADMIN", "ADMIN", "OPERATOR"),

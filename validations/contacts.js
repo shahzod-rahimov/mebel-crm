@@ -3,10 +3,10 @@ const Contacts = require("../models/Contact");
 
 const contactCreateValidation = checkSchema({
   phone_number: {
-    matches: {
-      options: /^(33|50|77|88|(9[013-57-9]))\d{7}$/,
-      errorMessage: "Invalid phone number",
-    },
+    // matches: {
+    //   options: /^(33|50|77|88|(9[013-57-9]))\d{7}$/,
+    //   errorMessage: "Invalid phone number",
+    // },
     custom: {
       options: isPhoneExists,
     },
@@ -19,10 +19,10 @@ const contactCreateValidation = checkSchema({
 
 const contactUpdateValidation = checkSchema({
   phone_number: {
-    matches: {
-      options: /^(33|50|77|88|(9[013-57-9]))\d{7}$/,
-      errorMessage: "Invalid phone number",
-    },
+    // matches: {
+    //   options: /^(33|50|77|88|(9[013-57-9]))\d{7}$/,
+    //   errorMessage: "Invalid phone number",
+    // },
     custom: {
       options: isPhoneExists,
     },

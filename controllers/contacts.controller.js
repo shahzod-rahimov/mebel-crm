@@ -33,6 +33,17 @@ async function getAll(req, res) {
   }
 }
 
+async function getRandomContact(req, res) {
+  try {
+    const count = await Contacts.count({ is_old: false }).exec();
+    const random = Math.floor(Math.random() * count);
+    const randomContact = await Contacts.findOne().skip(random);
+    res.ok(200, randomContact);
+  } catch (error) {
+    ApiError.internal(res, { message: error, friendlyMsg: "Server Error" });
+  }
+}
+
 async function create(req, res) {
   try {
     const contact = await Contacts.create(req.body);
@@ -89,14 +100,13 @@ async function update(req, res) {
 
 async function remove(req, res) {
   try {
-    // const contact = await Contacts.findByIdAndRemove(req.params.id);
+    const contact = await Contacts.findByIdAndRemove(req.params.id);
 
-    // if (!contact) {
-    //   return ApiError.notFound(res, { friendlyMsg: "Not Found" });
-    // }
+    if (!contact) {
+      return ApiError.notFound(res, { friendlyMsg: "Not Found" });
+    }
 
-    // res.ok(200, contact);
-    res.ok(200, "ok");
+    res.ok(200, contact);
   } catch (error) {
     ApiError.internal(res, { message: error, friendlyMsg: "Server Error" });
   }
@@ -150,4 +160,5 @@ module.exports = {
   update,
   remove,
   uploadFromFile,
+  getRandomContact,
 };
