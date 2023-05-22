@@ -70,4 +70,11 @@ router.post(
   Contacts.uploadFromFile
 );
 
+router.post(
+  "/change-satatus/:id",
+  rolePolice("SUPER-ADMIN", "ADMIN", "OPERATOR"),
+  [Validator.changeStatus, handleValidationErrors],
+  Contacts.changeStatus
+);
+
 module.exports = router;

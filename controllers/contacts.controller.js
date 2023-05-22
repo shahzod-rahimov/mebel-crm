@@ -46,7 +46,9 @@ async function getRandomContact(req, res) {
 
 async function create(req, res) {
   try {
-    const contact = await Contacts.create(req.body);
+    const { phone_number, staff_id } = req.body;
+
+    const contact = await Contacts.create({ phone_number, staff_id });
 
     res.ok(201, contact);
   } catch (error) {
@@ -152,6 +154,31 @@ async function uploadFromFile(req, res) {
     ApiError.internal(res, { message: error, friendlyMsg: "Server Error" });
   }
 }
+
+async function changeStatus(req, res) {
+  try {
+    const { status } = req.body;
+    let is_old = false;
+
+    if (status == 2 || status == 3) {
+      is_old = true;
+    }
+
+    const contact = await Contacts.findByIdAndUpdate(req.params.id, {
+      status,
+      is_old,
+    });
+
+    if (!contact) {
+      return ApiError.notFound(res, { friendlyMsg: "Not Found" });
+    }
+
+    res.ok(200, { msg: "Contact status changed successfully!" });
+  } catch (error) {
+    ApiError.internal(res, { message: error, friendlyMsg: "Server Error" });
+  }
+}
+
 module.exports = {
   getAll,
   create,
@@ -161,4 +188,5 @@ module.exports = {
   remove,
   uploadFromFile,
   getRandomContact,
+  changeStatus,
 };

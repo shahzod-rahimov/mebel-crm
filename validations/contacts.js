@@ -33,21 +33,6 @@ const contactUpdateValidation = checkSchema({
     optional: {},
     errorMessage: "Invalid ID",
   },
-  status: {
-    isInt: {
-      errorMessage: "Status must be a number",
-    },
-    isIn: {
-      options: [[1, 2, 3]],
-      errorMessage: "Required values - 1, 2, 3",
-    },
-    optional: {},
-  },
-  is_old: {
-    isBoolean: {},
-    optional: {},
-    errorMessage: "is_old must be a boolean",
-  },
 });
 
 const queryValidation = checkSchema({
@@ -76,9 +61,28 @@ const checkStaffID = checkSchema({
   },
 });
 
+const changeStatus = checkSchema({
+  id: {
+    isMongoId: {
+      errorMessage: "Invalid ID",
+    },
+  },
+  status: {
+    isInt: {
+      errorMessage: "Status must be a number",
+    },
+    isIn: {
+      options: [[1, 2, 3]],
+      errorMessage: "Required values - 1, 2, 3",
+    },
+    optional: {},
+  },
+});
+
 module.exports = {
   contactCreateValidation,
   contactUpdateValidation,
   queryValidation,
   checkStaffID,
+  changeStatus,
 };
