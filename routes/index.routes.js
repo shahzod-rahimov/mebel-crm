@@ -6,6 +6,7 @@ const ContactsRouter = require("./contacts.routes");
 const StaffRouter = require("./staff.routes");
 const ProductsRouter = require("./product.routes");
 const OrdersRouter = require("./order.routes");
+const OrderDeliveryRouter = require("./orderDelivery.routes");
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/contacts", ContactsRouter);
 router.use("/staff", StaffRouter);
 router.use("/products", ProductsRouter);
 router.use("/orders", OrdersRouter);
+router.use("/order-delivery", OrderDeliveryRouter);
 
 module.exports = router;
