@@ -124,6 +124,10 @@ async function uploadFromFile(req, res) {
       sourceFile: `${filePath}/${filename}`,
     }).Sheet1;
 
+    if (!result.length) {
+      return ApiError.notFound(res, { friendlyMsg: "File is empty" });
+    }
+
     for (let obj of result) {
       const phone_number = obj.A;
 
