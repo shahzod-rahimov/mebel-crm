@@ -122,22 +122,20 @@ async function uploadFromFile(req, res) {
 
     const result = excelToJson({
       sourceFile: `${filePath}/${filename}`,
-    }).Sheet1;
+    });
 
-    if (!result.length) {
+    if (!Object.values(result)[0].length) {
       return ApiError.notFound(res, { friendlyMsg: "File is empty" });
     }
 
-    for (let obj of result) {
+    for (let obj of Object.values(result)[0]) {
       const phone_number = obj.A;
 
       const isExists = await Contacts.findOne({
         phone_number: { $regex: `${phone_number}` },
       });
 
-      if (isExists) {
-        continue;
-      }
+      if (isExists) continue;
 
       await Contacts.create({ phone_number, staff_id });
     }
