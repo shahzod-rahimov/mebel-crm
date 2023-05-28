@@ -16,6 +16,12 @@ router.get(
   Staff.getAll
 );
 
+router.get(
+  "/search/deliveryman",
+  rolePolice("SUPER-ADMIN", "ADMIN", "OPERATOR"),
+  Staff.getAllDeliveries
+);
+
 router.post(
   "/auth/signup",
   [Validator.signupValidation, handleValidationErrors],
@@ -28,11 +34,7 @@ router.post(
   Staff.signin
 );
 
-router.get(
-  "/:id",
-  [paramsIDValidation, handleValidationErrors],
-  Staff.getByID
-);
+router.get("/:id", [paramsIDValidation, handleValidationErrors], Staff.getByID);
 
 router.post(
   "/activate",

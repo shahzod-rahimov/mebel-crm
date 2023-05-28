@@ -28,6 +28,19 @@ async function getAll(req, res) {
   }
 }
 
+async function getAllDeliveries(req, res) {
+  try {
+    const staff = await Staff.find({
+      role: "DELIVERYMAN",
+      is_active: true,
+    }).select("-hashed_token -password -createdAt");
+
+    res.ok(200, staff);
+  } catch (error) {
+    ApiError.internal(res, { message: error, friendlyMsg: "Server Error" });
+  }
+}
+
 async function create(req, res) {
   try {
     const password = bcrypt.hashSync(req.body.password, 7);
@@ -106,7 +119,7 @@ async function activate(req, res) {
       id,
       { is_active: value },
       { new: true }
-    );
+    ).select("-hashed_token -password -createdAt");
 
     if (!staff) {
       return ApiError.notFound(res, { friendlyMsg: "Not Found" });
@@ -162,4 +175,13 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { getAll, create, getByID, update, remove, signin, activate };
+module.exports = {
+  getAll,
+  create,
+  getByID,
+  update,
+  remove,
+  signin,
+  activate,
+  getAllDeliveries,
+};
